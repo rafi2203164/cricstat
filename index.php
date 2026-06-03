@@ -2,6 +2,19 @@
 require_once $_SERVER['DOCUMENT_ROOT']."/cricstat/auth.php";
 require_once $_SERVER['DOCUMENT_ROOT']."/cricstat/db.php";
 
+
+// Delete tournament
+if(isset($_POST['delete_tournament'])){
+    $tid = $_POST['delete_tournament'];
+    // delete in order — balls first, then matches, players, teams, tournament
+    mysqli_query($conn, "DELETE b FROM balls b JOIN matches m ON m.match_id=b.match_id WHERE m.tournament_id='$tid'");
+    mysqli_query($conn, "DELETE FROM matches WHERE tournament_id='$tid'");
+    mysqli_query($conn, "DELETE p FROM players p JOIN teams t ON t.team_id=p.team_id WHERE t.tournament_id='$tid'");
+    mysqli_query($conn, "DELETE FROM teams WHERE tournament_id='$tid'");
+    mysqli_query($conn, "DELETE FROM tournaments WHERE tournament_id='$tid'");
+    header("Location: index.php");
+    exit;
+}
 $tournaments = mysqli_query($conn,
     "SELECT t.*, 
         COUNT(DISTINCT te.team_id) AS team_count,
@@ -43,14 +56,20 @@ $tournaments = mysqli_query($conn,
 
 <?php while($t = mysqli_fetch_assoc($tournaments)){ ?>
 <div class="card card-accent">
-    <div class="card-header">
-        <h3 style="margin:0;"><?php echo $t['tournament_name']; ?></h3>
-        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-            <a href="teams/add_team.php?tournament_id=<?php echo $t['tournament_id']; ?>" class="btn btn-secondary" style="font-size:0.85rem;padding:0.4rem 0.9rem;">Manage Teams</a>
-            <a href="matches/create_match.php?tournament_id=<?php echo $t['tournament_id']; ?>" class="btn btn-primary" style="font-size:0.85rem;padding:0.4rem 0.9rem;">New Match</a>
-            <a href="tournaments/points_table.php?tournament_id=<?php echo $t['tournament_id']; ?>" class="btn btn-secondary" style="font-size:0.85rem;padding:0.4rem 0.9rem;">Points Table</a>
-        </div>
+<div class="card-header">
+    <h3 style="margin:0;"><?php echo $t['tournament_name']; ?></h3>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+        <a href="teams/add_team.php?tournament_id=<?php echo $t['tournament_id']; ?>" class="btn btn-secondary" style="font-size:0.85rem;padding:0.4rem 0.9rem;">Manage Teams</a>
+        <a href="matches/create_match.php?tournament_id=<?php echo $t['tournament_id']; ?>" class="btn btn-primary" style="font-size:0.85rem;padding:0.4rem 0.9rem;">New Match</a>
+        <a href="tournaments/points_table.php?tournament_id=<?php echo $t['tournament_id']; ?>" class="btn btn-secondary" style="font-size:0.85rem;padding:0.4rem 0.9rem;">Points Table</a>
+        <form method="POST" style="display:inline;">
+        <input type="hidden" name="delete_tournament" value="<?php echo $t['tournament_id']; ?>">
+        <button type="submit" class="btn btn-danger"
+            onclick="return confirm('Delete <?php echo $t['tournament_name']; ?> and ALL its data? This cannot be undone.')"
+            style="font-size:0.85rem;padding:0.4rem 0.9rem;">Delete</button>
+        </form>
     </div>
+</div>
 
     <p style="margin:0 0 0.75rem;font-size:0.85rem;">
         <?php echo $t['team_count']; ?> teams &nbsp;·&nbsp;
