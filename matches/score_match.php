@@ -1,8 +1,6 @@
 <?php
-session_start();
-
-
-include "../db.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/cricstat/auth.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/cricstat/db.php";
 
 function redirect_self($match_id){
     header("Location: score_match.php?match_id=".$match_id);

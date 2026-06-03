@@ -1,4 +1,5 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT']."/cricstat/auth.php";
 require_once $_SERVER['DOCUMENT_ROOT']."/cricstat/db.php";
 
 $tournaments = mysqli_query($conn,
@@ -23,9 +24,10 @@ $tournaments = mysqli_query($conn,
 <nav class="navbar">
     <a href="/cricstat/index.php" class="navbar-brand">Cric<span>Stat</span></a>
     <div class="navbar-links">
-        <a href="stats/most_runs.php">Most Runs</a>
-        <a href="stats/most_wickets.php">Most Wickets</a>
-    </div>
+    <a href="stats/most_runs.php">Most Runs</a>
+    <a href="stats/most_wickets.php">Most Wickets</a>
+    <a href="logout.php" style="color:var(--red);">Logout</a>
+</div>
 </nav>
 
 <div class="container">

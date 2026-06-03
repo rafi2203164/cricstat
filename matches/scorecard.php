@@ -1,4 +1,5 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT']."/cricstat/auth.php";
 require_once $_SERVER['DOCUMENT_ROOT']."/cricstat/db.php";
 
 $match_id = $_GET['match_id'] ?? 0;
