@@ -1,5 +1,5 @@
 <?php
-<?php
+
 require_once $_SERVER['DOCUMENT_ROOT']."/cricstat/auth.php";
 require_once $_SERVER['DOCUMENT_ROOT']."/cricstat/db.php";
 

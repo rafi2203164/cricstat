@@ -12,7 +12,16 @@ if($match_id == 0){ echo "Invalid match."; exit; }
 
 // reset session if this is a different match
 if(!isset($_SESSION['match_id']) || $_SESSION['match_id'] != $match_id){
-    $_SESSION = [];
+    // clear only match-related session data, not login
+    unset($_SESSION['striker']);
+    unset($_SESSION['non_striker']);
+    unset($_SESSION['bowler']);
+    unset($_SESSION['bowler_over']);
+    unset($_SESSION['over_end']);
+    unset($_SESSION['wicket']);
+    unset($_SESSION['free_hit']);
+    unset($_SESSION['out_player']);
+    unset($_SESSION['mode']);
     $_SESSION['match_id'] = $match_id;
 }
 

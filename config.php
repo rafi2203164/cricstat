@@ -1,3 +1,3 @@
 <?php
-define('ADMIN_PASSWORD', 'cricket123');
+define('ADMIN_PASSWORD', 'rafi2203164');
 ?>

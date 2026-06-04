@@ -1,5 +1,5 @@
 <?php
-<?php
+
 require_once $_SERVER['DOCUMENT_ROOT']."/cricstat/auth.php";
 require_once $_SERVER['DOCUMENT_ROOT']."/cricstat/db.php";
 
@@ -14,24 +14,12 @@ if(isset($_POST['submit'])){
     if($team1 == $team2){
         $error = "Team 1 and Team 2 cannot be the same!";
     } else {
-        $in_progress = mysqli_fetch_assoc(mysqli_query($conn,
-            "SELECT match_id FROM matches
-             WHERE tournament_id='$tid'
-             AND result IS NULL
-             AND winning_team IS NULL
-             LIMIT 1"
-        ));
-        if($in_progress){
-            $error = "There is already a match in progress.";
-            $in_progress_id = $in_progress['match_id'];
-        } else {
-            $sql = "INSERT INTO matches (tournament_id, team1_id, team2_id, total_overs)
-            VALUES ('$tid','$team1','$team2','$overs')";
-            mysqli_query($conn, $sql);
-            $match_id = mysqli_insert_id($conn);
-            header("Location: score_match.php?match_id=".$match_id);
-            exit;
-        }
+        $sql = "INSERT INTO matches (tournament_id, team1_id, team2_id, total_overs)
+VALUES ('$tid','$team1','$team2','$overs')";
+mysqli_query($conn, $sql);
+$match_id = mysqli_insert_id($conn);
+header("Location: /cricstat/matches/score_match.php?match_id=".$match_id);
+exit;
     }
 }
 
